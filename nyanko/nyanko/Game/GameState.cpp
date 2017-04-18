@@ -149,8 +149,6 @@ void GameState::Initialize()
 	BeforeMapNumX = 0;
 	BeforeMapNumY = 0;
 
-	
-
 	AttackUnitChoiceFlag = false;
 	AttackCompleteFlag = false;
 

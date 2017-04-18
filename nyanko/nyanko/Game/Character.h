@@ -5,12 +5,20 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
+//enum PlayerState
+//{
+//	FirstPlayer,
+//	SecondPlayer,
+//};
+
 class Character
 {
 protected:
 
 	int x;
 	int y;
+
+	bool AliveFlag;
 
 public:
 	//コンストラクタ
@@ -24,4 +32,6 @@ public:
 	void Update();
 	//描画
 	void Draw();
+
+	
 };

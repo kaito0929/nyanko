@@ -8,6 +8,8 @@
 #include "../DirectSound.h"
 #include "../SoundBuffer.h"
 
+#include "Character.h"
+
 #define CHACKNUM 4
 #define MAPSIZE 9
 
@@ -100,7 +102,6 @@ private:
 	//行動を決めるコマンド（戻る）
 	Texture BackCommandTex;
 	Sprite BackCommandSprite;
-
 
 	//コマンドを選択する矢印
 	Texture TheArrowTex;
