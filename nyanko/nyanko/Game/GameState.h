@@ -63,18 +63,6 @@ class GameState
 {
 private:
 
-	//三毛猫のテクスチャ
-	Texture MikenekoTex;
-	Sprite MikenekoSprite;
-
-	//茶トラのテクスチャ
-	Texture TyatoraTex;
-	Sprite TyatoraSprite;
-
-	//黒猫のテクスチャ
-	Texture KuronekoTex;
-	Sprite KuronekoSprite;
-
 	//白猫のテクスチャ
 	Texture ShironekoTex;
 	Sprite ShironekoSprite;
@@ -107,12 +95,6 @@ private:
 	Texture TheArrowTex;
 	Sprite TheArrowSprite;
 
-	//三毛猫の座標
-	Cat mike;
-	//茶トラの座標
-	Cat tyatora;
-	//黒猫の座標
-	Cat kuro;
 	//白猫の座標
 	Cat shiro;
 
@@ -168,6 +150,10 @@ private:
 	bool AttackCompleteFlag;
 
 	bool flag[3];
+
+	Mikeneko mike;
+	Kuroneko kuro;
+	Tyatora tyatora;
 
 public:
 	//コンストラクタ

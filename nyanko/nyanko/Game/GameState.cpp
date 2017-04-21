@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "Character.h"
 #include "../directInput.h"
 #include "../Xinput.h"
 #include "../Texture.h"
@@ -25,7 +26,7 @@ GameState::~GameState()
 
 void GameState::Initialize()
 {
-	mike.x = 4;
+	/*mike.x = 4;
 	mike.y = 3;
 	mike.AttackPosX = 100;
 	mike.AttackPosY = 100;
@@ -38,7 +39,11 @@ void GameState::Initialize()
 	kuro.x = 5;
 	kuro.y = 3;
 	kuro.AttackPosX = 100;
-	kuro.AttackPosY = 100;
+	kuro.AttackPosY = 100;*/
+
+	mike.Initialize();
+	kuro.Initialize();
+	tyatora.Initialize();
 
 	shiro.x = 2;
 	shiro.y = 2;
@@ -57,20 +62,20 @@ void GameState::Initialize()
 	flag[1] == false;
 	flag[2] == false;
 
-	//三毛猫のテクスチャの初期化
-	MikenekoTex.Load("Material/mikeneko.png");
-	MikenekoSprite.SetPos(mike.x * 200, mike.y * 150);
-	MikenekoSprite.SetSize(100, 100);
+	////三毛猫のテクスチャの初期化
+	//MikenekoTex.Load("Material/mikeneko.png");
+	//MikenekoSprite.SetPos(mike.x * 200, mike.y * 150);
+	//MikenekoSprite.SetSize(100, 100);
 
-	//茶トラのテクスチャの初期化
-	TyatoraTex.Load("Material/tyatora.png");
-	TyatoraSprite.SetPos(tyatora.x * 200, tyatora.y * 150);
-	TyatoraSprite.SetSize(100, 100);
+	////茶トラのテクスチャの初期化
+	//TyatoraTex.Load("Material/tyatora.png");
+	//TyatoraSprite.SetPos(tyatora.x * 200, tyatora.y * 150);
+	//TyatoraSprite.SetSize(100, 100);
 
-	//黒猫のテクスチャの初期化
-	KuronekoTex.Load("Material/kuroneko.png");
-	KuronekoSprite.SetPos(kuro.x * 200, kuro.y * 150);
-	KuronekoSprite.SetSize(100, 100);
+	////黒猫のテクスチャの初期化
+	//KuronekoTex.Load("Material/kuroneko.png");
+	//KuronekoSprite.SetPos(kuro.x * 200, kuro.y * 150);
+	//KuronekoSprite.SetSize(100, 100);
 
 	//白猫のテクスチャの初期化
 	ShironekoTex.Load("Material/sironeko.png");
@@ -178,10 +183,14 @@ void GameState::Draw()
 		}
 	}
 
-	Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
+	/*Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
 	Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
-	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);
+	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);*/
 	Direct3D::DrawSprite(ShironekoSprite, ShironekoTex);
+
+	mike.Draw();
+	kuro.Draw();
+	tyatora.Draw();
 
 	if (playerstate == COMMAND)
 	{
@@ -199,10 +208,11 @@ void GameState::Update()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
+	mike.Update();
+	kuro.Update();
+	tyatora.Update();
+
 	CursorSprite.SetPos((CursorX + 1) * 100, (CursorY + 1) * 100);
-	MikenekoSprite.SetPos((mike.x + 1) * mike.AttackPosX, (mike.y + 1) * mike.AttackPosY);
-	TyatoraSprite.SetPos((tyatora.x + 1) * tyatora.AttackPosX, (tyatora.y + 1) * tyatora.AttackPosY);
-	KuronekoSprite.SetPos((kuro.x + 1) * kuro.AttackPosX, (kuro.y + 1) * kuro.AttackPosY);
 	ShironekoSprite.SetPos((shiro.x + 1) * 100, (shiro.y + 1) * 100);
 	
 	//=■移動可能範囲の表示関数■================================
@@ -246,16 +256,16 @@ void GameState::Update()
 		if (AliveFlag == true)
 		{
 			//ユニット（猫）がいる場所は-3に
-			Map[mike.y][mike.x] = -3;
+			//Map[mike.y][mike.x] = -3;
 			Map[shiro.y][shiro.x] = -3;
-			Map[tyatora.y][tyatora.x] = -3;
-			Map[kuro.y][kuro.x] = -3;
+			//Map[tyatora.y][tyatora.x] = -3;
+			//Map[kuro.y][kuro.x] = -3;
 		}
 
 		//ユニットを選択
-		UnitChoice(mike.x, mike.y,&flag[0]);
-		UnitChoice(tyatora.x, tyatora.y, &flag[1]);
-		UnitChoice(kuro.x, kuro.y, &flag[2]);
+		//UnitChoice(mike.x, mike.y,&flag[0]);
+		//UnitChoice(tyatora.x, tyatora.y, &flag[1]);
+		//UnitChoice(kuro.x, kuro.y, &flag[2]);
 		
 		break;
 	case MOVE://猫を移動させる
@@ -263,9 +273,9 @@ void GameState::Update()
 		//選択用のカーソルを移動させる関数
 		MoveCursor();
 
-		UnitMove(&mike.x, &mike.y,flag[0]);
-		UnitMove(&tyatora.x, &tyatora.y,flag[1]);
-		UnitMove(&kuro.x, &kuro.y, flag[2]);
+		//UnitMove(&mike.x, &mike.y,flag[0]);
+		//UnitMove(&tyatora.x, &tyatora.y,flag[1]);
+		//UnitMove(&kuro.x, &kuro.y, flag[2]);
 
 		break;
 	case COMMAND://待機、攻撃、戻るといった行動を決めるコマンド選択
@@ -317,8 +327,8 @@ void GameState::Update()
 			TheArrowSprite.SetPos(650, 650);
 			if (pDi->KeyJustPressed(DIK_RETURN))
 			{
-				mike.x = BeforeMapNumX;
-				mike.y = BeforeMapNumY;
+				//mike.x = BeforeMapNumX;
+				//mike.y = BeforeMapNumY;
 				playerstate = CHOICE;
 			}
 			break;
@@ -343,9 +353,9 @@ void GameState::Update()
 			}
 		}
 
-		AttackMotion(mike.x, mike.y, &mike.AttackPosX, &mike.AttackPosY, &flag[0]);
-		AttackMotion(tyatora.x, tyatora.y, &tyatora.AttackPosX, &tyatora.AttackPosY, &flag[1]);
-		AttackMotion(kuro.x, kuro.y, &kuro.AttackPosX, &kuro.AttackPosY, &flag[2]);
+		//AttackMotion(mike.x, mike.y, &mike.AttackPosX, &mike.AttackPosY, &flag[0]);
+		//AttackMotion(tyatora.x, tyatora.y, &tyatora.AttackPosX, &tyatora.AttackPosY, &flag[1]);
+		//AttackMotion(kuro.x, kuro.y, &kuro.AttackPosX, &kuro.AttackPosY, &flag[2]);
 		break;
 	}
 	
