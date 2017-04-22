@@ -26,29 +26,15 @@ GameState::~GameState()
 
 void GameState::Initialize()
 {
-	/*mike.x = 4;
-	mike.y = 3;
-	mike.AttackPosX = 100;
-	mike.AttackPosY = 100;
-
-	tyatora.x = 3;
-	tyatora.y = 3;
-	tyatora.AttackPosX = 100;
-	tyatora.AttackPosY = 100;
-
-	kuro.x = 5;
-	kuro.y = 3;
-	kuro.AttackPosX = 100;
-	kuro.AttackPosY = 100;*/
-
+	
 	mike.Initialize();
 	kuro.Initialize();
 	tyatora.Initialize();
 
-	shiro.x = 2;
+	/*shiro.x = 2;
 	shiro.y = 2;
 	shiro.AttackPosX = 100;
-	shiro.AttackPosY = 100;
+	shiro.AttackPosY = 100;*/
 
 	SearchX = 0;
 	SearchX = 0;
@@ -58,29 +44,11 @@ void GameState::Initialize()
 
 	MoveCount = 2;
 
-	flag[0] == false;
-	flag[1] == false;
-	flag[2] == false;
-
-	////三毛猫のテクスチャの初期化
-	//MikenekoTex.Load("Material/mikeneko.png");
-	//MikenekoSprite.SetPos(mike.x * 200, mike.y * 150);
-	//MikenekoSprite.SetSize(100, 100);
-
-	////茶トラのテクスチャの初期化
-	//TyatoraTex.Load("Material/tyatora.png");
-	//TyatoraSprite.SetPos(tyatora.x * 200, tyatora.y * 150);
-	//TyatoraSprite.SetSize(100, 100);
-
-	////黒猫のテクスチャの初期化
-	//KuronekoTex.Load("Material/kuroneko.png");
-	//KuronekoSprite.SetPos(kuro.x * 200, kuro.y * 150);
-	//KuronekoSprite.SetSize(100, 100);
 
 	//白猫のテクスチャの初期化
-	ShironekoTex.Load("Material/sironeko.png");
-	ShironekoSprite.SetPos(shiro.x * 200, shiro.y * 150);
-	ShironekoSprite.SetSize(100, 100);
+	//ShironekoTex.Load("Material/sironeko.png");
+	//ShironekoSprite.SetPos(shiro.x * 200, shiro.y * 150);
+	//ShironekoSprite.SetSize(100, 100);
 
 	//移動可能範囲のマスのテクスチャの初期化
 	MoveSquaresTex.Load("Material/masu_b.png");
@@ -183,10 +151,8 @@ void GameState::Draw()
 		}
 	}
 
-	/*Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
-	Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
-	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);*/
-	Direct3D::DrawSprite(ShironekoSprite, ShironekoTex);
+	
+	//Direct3D::DrawSprite(ShironekoSprite, ShironekoTex);
 
 	mike.Draw();
 	kuro.Draw();
@@ -213,7 +179,7 @@ void GameState::Update()
 	tyatora.Update();
 
 	CursorSprite.SetPos((CursorX + 1) * 100, (CursorY + 1) * 100);
-	ShironekoSprite.SetPos((shiro.x + 1) * 100, (shiro.y + 1) * 100);
+	//ShironekoSprite.SetPos((shiro.x + 1) * 100, (shiro.y + 1) * 100);
 	
 	//=■移動可能範囲の表示関数■================================
 
@@ -248,34 +214,28 @@ void GameState::Update()
 			}
 		}
 
-		for (int i = 0; i < 3; i++)
-		{
-			flag[i] = false;
-		}
-
 		if (AliveFlag == true)
 		{
 			//ユニット（猫）がいる場所は-3に
-			//Map[mike.y][mike.x] = -3;
-			Map[shiro.y][shiro.x] = -3;
-			//Map[tyatora.y][tyatora.x] = -3;
-			//Map[kuro.y][kuro.x] = -3;
+			MapChange(mike.x, mike.y, mike.AliveFlag);
+			MapChange(kuro.x, kuro.y, kuro.AliveFlag);
+			MapChange(tyatora.x, tyatora.y, tyatora.AliveFlag);
 		}
 
 		//ユニットを選択
-		//UnitChoice(mike.x, mike.y,&flag[0]);
-		//UnitChoice(tyatora.x, tyatora.y, &flag[1]);
-		//UnitChoice(kuro.x, kuro.y, &flag[2]);
-		
+		UnitChoice(mike.x, mike.y);
+		UnitChoice(kuro.x, kuro.y);
+		UnitChoice(tyatora.x, tyatora.y);
+
 		break;
 	case MOVE://猫を移動させる
 
 		//選択用のカーソルを移動させる関数
 		MoveCursor();
 
-		//UnitMove(&mike.x, &mike.y,flag[0]);
-		//UnitMove(&tyatora.x, &tyatora.y,flag[1]);
-		//UnitMove(&kuro.x, &kuro.y, flag[2]);
+		UnitMove(&mike.x, &mike.y, mike.MoveFlag);
+		UnitMove(&kuro.x, &kuro.y, kuro.MoveFlag);
+		UnitMove(&tyatora.x, &tyatora.y, tyatora.MoveFlag);
 
 		break;
 	case COMMAND://待機、攻撃、戻るといった行動を決めるコマンド選択
@@ -353,13 +313,14 @@ void GameState::Update()
 			}
 		}
 
-		//AttackMotion(mike.x, mike.y, &mike.AttackPosX, &mike.AttackPosY, &flag[0]);
-		//AttackMotion(tyatora.x, tyatora.y, &tyatora.AttackPosX, &tyatora.AttackPosY, &flag[1]);
-		//AttackMotion(kuro.x, kuro.y, &kuro.AttackPosX, &kuro.AttackPosY, &flag[2]);
+		AttackMotion(mike.x, mike.y, &mike.AttackPosX, &mike.AttackPosY, &mike.MoveFlag);
+		AttackMotion(kuro.x, kuro.y, &kuro.AttackPosX, &kuro.AttackPosY, &kuro.MoveFlag);
+		AttackMotion(tyatora.x, tyatora.y, &tyatora.AttackPosX, &tyatora.AttackPosY, &tyatora.MoveFlag);
 		break;
 	}
 	
 	UnitFade();
+	
 	
 }
 
@@ -376,7 +337,7 @@ void GameState::Search()
 			{
 				for (int i = 0; i < CHACKNUM; i++)
 				{
-					//三毛猫の隣のマスを調べる
+					//猫の隣のマスを調べる
 					SearchX = x + ChackDirectionX[i];
 					SearchY = y + ChackDirectionY[i];
 
@@ -673,12 +634,12 @@ void GameState::UnitFade()
 {
 	if (AliveFlag == false)
 	{
-		ShironekoSprite.SetAlpha(ShironekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+		//ShironekoSprite.SetAlpha(ShironekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
 	}
 }
 
 //ユニットを選択した時の処理
-void GameState::UnitChoice(int x,int y,bool *flag)
+void GameState::UnitChoice(int x,int y)
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
@@ -699,7 +660,6 @@ void GameState::UnitChoice(int x,int y,bool *flag)
 			//ユニットの元に位置の変数を代入
 			BeforeMapNumX = x;
 			BeforeMapNumY = y;
-			*flag = true;
 		}
 	}
 }
@@ -722,5 +682,14 @@ void GameState::UnitMove(int *x, int *y,bool flag)
 			//コマンド選択へ遷移
 			playerstate = COMMAND;
 		}
+	}
+}
+
+//マップの数値を変える関数
+void GameState::MapChange(int x, int y, bool flag)
+{
+	if (flag == true)
+	{
+		Map[y][x] = -3;
 	}
 }

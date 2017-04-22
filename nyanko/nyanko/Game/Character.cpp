@@ -21,15 +21,6 @@ Character::~Character()
 
 }
 
-//マップの数値を変える関数
-void Character::MapChange(int *map[9][9],int x,int y,bool flag)
-{
-	if (flag == true)
-	{
-		*map[y][x] = -3;
-	}
-}
-
 //=====================================================
 //■Mikenekoクラス■
 //=====================================================
@@ -53,6 +44,7 @@ void Mikeneko::Initialize()
 	AttackPosY = 100;
 
 	AliveFlag = true;
+	MoveFlag = true;
 
 	//三毛猫のテクスチャの初期化
 	MikenekoTex.Load("Material/mikeneko.png");
@@ -98,6 +90,7 @@ void Kuroneko::Initialize()
 	AttackPosY = 100;
 
 	AliveFlag = true;
+	MoveFlag = true;
 
 	//黒猫のテクスチャの初期化
 	KuronekoTex.Load("Material/kuroneko.png");
@@ -105,6 +98,7 @@ void Kuroneko::Initialize()
 	KuronekoSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
 	KuronekoSprite.SetSize(100, 100);
+	
 }
 //描画関数
 void Kuroneko::Draw()
@@ -143,6 +137,7 @@ void Tyatora::Initialize()
 	AttackPosY = 100;
 
 	AliveFlag = true;
+	MoveFlag = true;
 
 	//茶トラのテクスチャの初期化
 	TyatoraTex.Load("Material/tyatora.png");

@@ -21,16 +21,6 @@
 //フェードアウト用の数値
 #define FADE_OUT_CHANGENUM -1 
 
-struct Cat
-{
-	//ユニットの座標
-	int x;
-	int y;
-	//攻撃しているように見せるためのユニットの表示場所の変数
-	int AttackPosX;
-	int AttackPosY;
-};
-
 //基本的なプレイヤーの操作
 enum PlayerState
 {
@@ -63,9 +53,9 @@ class GameState
 {
 private:
 
-	//白猫のテクスチャ
-	Texture ShironekoTex;
-	Sprite ShironekoSprite;
+	////白猫のテクスチャ
+	//Texture ShironekoTex;
+	//Sprite ShironekoSprite;
 
 	//移動できる範囲のマス
 	Texture MoveSquaresTex;
@@ -96,7 +86,7 @@ private:
 	Sprite TheArrowSprite;
 
 	//白猫の座標
-	Cat shiro;
+	//Cat shiro;
 
 	//プレイヤーの行動手順
 	PlayerState playerstate;
@@ -149,8 +139,6 @@ private:
 	//攻撃完了のフラグ
 	bool AttackCompleteFlag;
 
-	bool flag[3];
-
 	Mikeneko mike;
 	Kuroneko kuro;
 	Tyatora tyatora;
@@ -184,8 +172,11 @@ public:
 	void UnitFade();
 
 	//動かすユニットを決定
-	void UnitChoice(int x, int y,bool *flag);
+	void UnitChoice(int x, int y);
 
 	//ユニットを実際に移動させる関数
 	void UnitMove(int *x, int *y,bool flag);
+
+	//マップの数値を変えるための関数
+	void MapChange(int x, int y, bool flag);
 };

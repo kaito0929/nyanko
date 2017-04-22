@@ -1,11 +1,19 @@
 #pragma once
-
+#include "GameState.h"
 #include "../directInput.h"
 #include "../Xinput.h"
 #include "../Texture.h"
 #include "../Sprite.h"
 #include "../mesh.h"
 #include "../Direct3D.h"
+
+enum Direction
+{
+	MOVE_UP,				//上方向
+	MOVE_DOWN,			//下方向
+	MOVE_RIGHT,			//右方向
+	MOVE_LEFT,			//左方向
+};
 
 //================================================================
 //クラス名  ：Characterクラス
@@ -18,6 +26,12 @@ class Character
 {
 protected:
 
+public:
+	//コンストラクタ
+	Character();
+	//デストラクタ
+	~Character();
+
 	//キャラクターの座標
 	int x;
 	int y;
@@ -29,13 +43,8 @@ protected:
 	int AttackPosX;
 	int AttackPosY;
 
-public:
-	//コンストラクタ
-	Character();
-	//デストラクタ
-	~Character();
-
-	void MapChange(int *map[9][9], int x, int y, bool flag);
+	//移動中かのフラグ
+	bool MoveFlag;
 };
 
 
