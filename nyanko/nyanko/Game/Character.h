@@ -7,13 +7,6 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
-enum Direction
-{
-	MOVE_UP,				//上方向
-	MOVE_DOWN,			//下方向
-	MOVE_RIGHT,			//右方向
-	MOVE_LEFT,			//左方向
-};
 
 //================================================================
 //クラス名  ：Characterクラス

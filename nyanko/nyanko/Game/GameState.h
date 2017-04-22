@@ -49,6 +49,13 @@ enum AttackMotion
 	INITIALSTATE,	//方向も決まっていない初期の状態
 };
 
+//プレイヤーのターンを切り替えるための変数
+enum PlayerTurn
+{
+	FirstPlayer_Turn,
+	SecondPlayer_Turn,
+};
+
 class GameState
 {
 private:
@@ -97,6 +104,9 @@ private:
 	//攻撃した際の動き
 	AttackMotion attack;
 
+	//プレイヤーのターンを切り替えるための変数
+	PlayerTurn playerTurn;
+
 	//マップデータ:9*9
 	int Map[MAPSIZE][MAPSIZE];
 
@@ -139,9 +149,12 @@ private:
 	//攻撃完了のフラグ
 	bool AttackCompleteFlag;
 
-	Mikeneko mike;
-	Kuroneko kuro;
-	Tyatora tyatora;
+	//プレイヤーの行動回数
+	int PlayerActionNum;
+
+	Mikeneko mike[2];
+	Kuroneko kuro[2];
+	Tyatora tyatora[2];
 
 public:
 	//コンストラクタ
@@ -172,11 +185,23 @@ public:
 	void UnitFade();
 
 	//動かすユニットを決定
-	void UnitChoice(int x, int y);
+	void UnitChoice(int x, int y,bool *flag);
 
 	//ユニットを実際に移動させる関数
 	void UnitMove(int *x, int *y,bool flag);
 
 	//マップの数値を変えるための関数
 	void MapChange(int x, int y, bool flag);
+
+	//1Pの行動関数
+	void FirstPlayer_Update();
+
+	//2Pの行動関数
+	void SecondPlayer_Update();
+
+	//マップの数値をリセットする関数
+	void MapReset();
+
+	//コマンドを操作する関数
+	void CommandPlay(int *x,int *y,bool flag);
 };

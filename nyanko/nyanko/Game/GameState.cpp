@@ -13,7 +13,6 @@
 int ax = 100;
 int ay = 100;
 
-
 GameState::GameState()
 {
 	
@@ -27,9 +26,30 @@ GameState::~GameState()
 void GameState::Initialize()
 {
 	
-	mike.Initialize();
-	kuro.Initialize();
-	tyatora.Initialize();
+	for (int i = 0; i < 2; i++)
+	{
+		mike[i].Initialize();
+		kuro[i].Initialize();
+		tyatora[i].Initialize();
+	}
+
+	mike[0].x = 1;
+	mike[0].y = 7;
+
+	kuro[0].x = 2;
+	kuro[0].y = 7;
+
+	tyatora[0].x = 3;
+	tyatora[0].y = 7;
+
+	mike[1].x = 1;
+	mike[1].y = 1;
+
+	kuro[1].x = 2;
+	kuro[1].y = 1;
+
+	tyatora[1].x = 3;
+	tyatora[1].y = 1;
 
 	/*shiro.x = 2;
 	shiro.y = 2;
@@ -85,6 +105,7 @@ void GameState::Initialize()
 	playerstate = CHOICE;
 	command = ATTACK;
 	attack = INITIALSTATE;
+	playerTurn = FirstPlayer_Turn;
 
 	AttackCommandDisplay = false;
 	AttackSearchX = 0;
@@ -122,6 +143,8 @@ void GameState::Initialize()
 	BeforeMapNumX = 0;
 	BeforeMapNumY = 0;
 
+	PlayerActionNum = 3;
+
 	AttackUnitChoiceFlag = false;
 	AttackCompleteFlag = false;
 
@@ -140,32 +163,47 @@ void GameState::Draw()
 			
 			if (Map[y][x]>-1)
 			{
+				//移動可能の青マスを描画
 				Direct3D::DrawSprite(MoveSquaresSprite, MoveSquaresTex);
 			}
 			else if (Map[y][x] == -4)
 			{
+				//赤マスを描画
 				Direct3D::DrawSprite(AttackSquaresSprite, AttackSquaresTex);
 			}
 
+			//ユニットを選択したり移動したりするカーソルの描画
 			Direct3D::DrawSprite(CursorSprite, CursorTex);
 		}
 	}
 
-	
 	//Direct3D::DrawSprite(ShironekoSprite, ShironekoTex);
 
-	mike.Draw();
-	kuro.Draw();
-	tyatora.Draw();
+	for (int i = 0; i < 2; i++)
+	{
+		//三毛猫を描画
+		mike[i].Draw();
+		//黒猫を描画
+		kuro[i].Draw();
+		//茶トラを描画
+		tyatora[i].Draw();
+	}
 
+	//行動コマンドの描画
+	//行動手順がCOMMANDの時に処理を行う
 	if (playerstate == COMMAND)
 	{
+		//四方に攻撃できる敵がいるならば攻撃コマンドを表示
 		if (AttackCommandDisplay == true)
 		{
+			//攻撃コマンド
 			Direct3D::DrawSprite(AttackCommandSprite, AttackCommandTex);
 		}
+		//待機コマンド
 		Direct3D::DrawSprite(StandbyCommandSprite, StandbyCommandTex);
+		//戻るコマンド
 		Direct3D::DrawSprite(BackCommandSprite, BackCommandTex);
+		//選択用の矢印
 		Direct3D::DrawSprite(TheArrowSprite, TheArrowTex);
 	}
 }
@@ -174,151 +212,32 @@ void GameState::Update()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
-	mike.Update();
-	kuro.Update();
-	tyatora.Update();
+	for (int i = 0; i < 2; i++)
+	{
+		mike[i].Update();
+		kuro[i].Update();
+		tyatora[i].Update();
+	}
 
 	CursorSprite.SetPos((CursorX + 1) * 100, (CursorY + 1) * 100);
-	//ShironekoSprite.SetPos((shiro.x + 1) * 100, (shiro.y + 1) * 100);
-	
-	//=■移動可能範囲の表示関数■================================
 
+
+	//移動可能範囲の表示関数
 	Search();
-
-	//===========================================================
-
-	switch (playerstate)
+	
+	switch (playerTurn)
 	{
-	case CHOICE://どの猫を動かすか決める
-
-		//攻撃コマンドの表示フラグはfalseにしておく
-		AttackCommandDisplay = false;
-		//選択用のカーソルを動かす関数
-		MoveCursor();
-
-		//マップをリセット
-		for (int y = 0; y < MAPSIZE; y++)
-		{
-			for (int x = 0; x < MAPSIZE; x++)
-			{
-				//移動不可能な場所は-2にしておく
-				//それ以外の場所は移動可能場所として-1に
-				if (y == 0 || x == 0 || y == 8 || x == 8)
-				{
-					Map[y][x] = -2;
-				}
-				else
-				{
-					Map[y][x] = -1;
-				}
-			}
-		}
-
-		if (AliveFlag == true)
-		{
-			//ユニット（猫）がいる場所は-3に
-			MapChange(mike.x, mike.y, mike.AliveFlag);
-			MapChange(kuro.x, kuro.y, kuro.AliveFlag);
-			MapChange(tyatora.x, tyatora.y, tyatora.AliveFlag);
-		}
-
-		//ユニットを選択
-		UnitChoice(mike.x, mike.y);
-		UnitChoice(kuro.x, kuro.y);
-		UnitChoice(tyatora.x, tyatora.y);
-
+	case FirstPlayer_Turn:
+		//1Pの行動
+		FirstPlayer_Update();
 		break;
-	case MOVE://猫を移動させる
-
-		//選択用のカーソルを移動させる関数
-		MoveCursor();
-
-		UnitMove(&mike.x, &mike.y, mike.MoveFlag);
-		UnitMove(&kuro.x, &kuro.y, kuro.MoveFlag);
-		UnitMove(&tyatora.x, &tyatora.y, tyatora.MoveFlag);
-
-		break;
-	case COMMAND://待機、攻撃、戻るといった行動を決めるコマンド選択
-
-		//移動したその場から四方を調べて攻撃可能なマスがあるかを調べる
-		for (int i = 0; i < CHACKNUM; i++)
-		{
-			AttackSearchX = CursorX + ChackDirectionX[i];
-			AttackSearchY = CursorY + ChackDirectionY[i];
-
-			//上、下、右、左の何処かに攻撃可能マスがあれば
-			//攻撃コマンドを表示させる
-			if (Map[AttackSearchY][AttackSearchX] == -4)
-			{
-				AttackCommandDisplay = true;
-			}
-			else if (Map[AttackSearchY][AttackSearchX] == -3)
-			{
-				Map[AttackSearchY][AttackSearchX] = -4;
-			}
-
-		}
-
-		//コマンドを選択する矢印の移動
-		CommandChoice();
-
-		//選択するコマンドによって変化
-		switch (command)
-		{
-		case ATTACK://攻撃フェーズに遷移
-
-			//矢印の位置を変更
-			TheArrowSprite.SetPos(650, 450);
-			if (pDi->KeyJustPressed(DIK_RETURN))
-			{
-				playerstate = ATTACKCHOICE;
-			}
-			break;
-		case STANDBY://その場に待機する
-			//矢印の位置を変更
-			TheArrowSprite.SetPos(650, 550);
-			if (pDi->KeyJustPressed(DIK_RETURN))
-			{
-				playerstate = CHOICE;
-			}
-			break;
-		case BACK://元の場所へ戻る
-			//矢印の位置を変更
-			TheArrowSprite.SetPos(650, 650);
-			if (pDi->KeyJustPressed(DIK_RETURN))
-			{
-				//mike.x = BeforeMapNumX;
-				//mike.y = BeforeMapNumY;
-				playerstate = CHOICE;
-			}
-			break;
-		}
-
-		break;
-
-	case ATTACKCHOICE://攻撃する敵ユニットを決定
-		
-		if (AttackUnitChoiceFlag == false)
-		{
-			//攻撃対象を選択するカーソルを移動させる関数
-			MoveCursor();
-		}
-
-		if (pDi->KeyJustPressed(DIK_RETURN))
-		{
-			if (Map[CursorY][CursorX] == -4)
-			{
-				//フラグをtrueにして移動開始
-				AttackUnitChoiceFlag = true;
-			}
-		}
-
-		AttackMotion(mike.x, mike.y, &mike.AttackPosX, &mike.AttackPosY, &mike.MoveFlag);
-		AttackMotion(kuro.x, kuro.y, &kuro.AttackPosX, &kuro.AttackPosY, &kuro.MoveFlag);
-		AttackMotion(tyatora.x, tyatora.y, &tyatora.AttackPosX, &tyatora.AttackPosY, &tyatora.MoveFlag);
+	case SecondPlayer_Turn:
+		//2Pの行動
+		SecondPlayer_Update();
 		break;
 	}
 	
+
 	UnitFade();
 	
 	
@@ -639,7 +558,7 @@ void GameState::UnitFade()
 }
 
 //ユニットを選択した時の処理
-void GameState::UnitChoice(int x,int y)
+void GameState::UnitChoice(int x,int y,bool *flag)
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
@@ -660,6 +579,8 @@ void GameState::UnitChoice(int x,int y)
 			//ユニットの元に位置の変数を代入
 			BeforeMapNumX = x;
 			BeforeMapNumY = y;
+
+			*flag = true;
 		}
 	}
 }
@@ -691,5 +612,258 @@ void GameState::MapChange(int x, int y, bool flag)
 	if (flag == true)
 	{
 		Map[y][x] = -3;
+	}
+}
+
+//1Pの行動関数
+void GameState::FirstPlayer_Update()
+{
+	DirectInput* pDi = DirectInput::GetInstance();
+
+	switch (playerstate)
+	{
+	case CHOICE://どの猫を動かすか決める
+
+		//攻撃コマンドの表示フラグはfalseにしておく
+		AttackCommandDisplay = false;
+		//選択用のカーソルを動かす関数
+		MoveCursor();
+		//マップの数値を一度リセットしておく
+		MapReset();
+
+		mike[0].MoveFlag = false;
+		kuro[0].MoveFlag = false;
+		tyatora[0].MoveFlag = false;
+		
+		//ユニット（猫）がいる場所は-3に
+		MapChange(mike[1].x, mike[1].y, mike[1].AliveFlag);
+		MapChange(kuro[1].x, kuro[1].y, kuro[1].AliveFlag);
+		MapChange(tyatora[1].x, tyatora[1].y, tyatora[1].AliveFlag);
+
+		//ユニットを選択
+		UnitChoice(mike[0].x, mike[0].y, &mike[0].MoveFlag);
+		UnitChoice(kuro[0].x, kuro[0].y, &kuro[0].MoveFlag);
+		UnitChoice(tyatora[0].x, tyatora[0].y, &tyatora[0].MoveFlag);
+
+		break;
+	case MOVE://猫を移動させる
+
+		//選択用のカーソルを移動させる関数
+		MoveCursor();
+
+		//選択したユニットを移動
+		UnitMove(&mike[0].x, &mike[0].y, mike[0].MoveFlag);
+		UnitMove(&kuro[0].x, &kuro[0].y, kuro[0].MoveFlag);
+		UnitMove(&tyatora[0].x, &tyatora[0].y, tyatora[0].MoveFlag);
+
+		break;
+	case COMMAND://待機、攻撃、戻るといった行動を決めるコマンド選択
+
+		//移動したその場から四方を調べて攻撃可能なマスがあるかを調べる
+		for (int i = 0; i < CHACKNUM; i++)
+		{
+			AttackSearchX = CursorX + ChackDirectionX[i];
+			AttackSearchY = CursorY + ChackDirectionY[i];
+
+			//上、下、右、左の何処かに攻撃可能マスがあれば
+			//攻撃コマンドを表示させる
+			if (Map[AttackSearchY][AttackSearchX] == -4)
+			{
+				AttackCommandDisplay = true;
+			}
+			else if (Map[AttackSearchY][AttackSearchX] == -3)
+			{
+				Map[AttackSearchY][AttackSearchX] = -4;
+			}
+
+		}
+
+		//コマンドを選択する矢印の移動
+		CommandChoice();
+
+		//選択したコマンドの効果を処理する関数
+		CommandPlay(&mike[0].x, &mike[0].y,mike[0].MoveFlag);
+		//選択したコマンドの効果を処理する関数
+		CommandPlay(&kuro[0].x, &kuro[0].y, kuro[0].MoveFlag);
+		//選択したコマンドの効果を処理する関数
+		CommandPlay(&tyatora[0].x, &tyatora[0].y, tyatora[0].MoveFlag);
+
+		break;
+
+	case ATTACKCHOICE://攻撃する敵ユニットを決定
+
+		if (AttackUnitChoiceFlag == false)
+		{
+			//攻撃対象を選択するカーソルを移動させる関数
+			MoveCursor();
+		}
+
+		if (pDi->KeyJustPressed(DIK_RETURN))
+		{
+			if (Map[CursorY][CursorX] == -4)
+			{
+				//フラグをtrueにして移動開始
+				AttackUnitChoiceFlag = true;
+			}
+		}
+
+		//ユニットを決められた方向へ攻撃
+		AttackMotion(mike[0].x, mike[0].y, &mike[0].AttackPosX, &mike[0].AttackPosY, &mike[0].MoveFlag);
+		AttackMotion(kuro[0].x, kuro[0].y, &kuro[0].AttackPosX, &kuro[0].AttackPosY, &kuro[0].MoveFlag);
+		AttackMotion(tyatora[0].x, tyatora[0].y, &tyatora[0].AttackPosX, &tyatora[0].AttackPosY, &tyatora[0].MoveFlag);
+		break;
+	}
+}
+
+//2Pの行動関数
+void GameState::SecondPlayer_Update()
+{
+	DirectInput* pDi = DirectInput::GetInstance();
+
+	switch (playerstate)
+	{
+	case CHOICE://どの猫を動かすか決める
+
+		//攻撃コマンドの表示フラグはfalseにしておく
+		AttackCommandDisplay = false;
+		//選択用のカーソルを動かす関数
+		MoveCursor();
+		//マップの数値を一度リセットしておく
+		MapReset();
+
+		
+		//ユニット（猫）がいる場所は-3に
+		MapChange(mike[0].x, mike[0].y, mike[0].AliveFlag);
+		MapChange(kuro[0].x, kuro[0].y, kuro[0].AliveFlag);
+		MapChange(tyatora[0].x, tyatora[0].y, tyatora[0].AliveFlag);
+		
+
+		//ユニットを選択
+		UnitChoice(mike[1].x, mike[1].y, &mike[1].MoveFlag);
+		UnitChoice(kuro[1].x, kuro[1].y, &kuro[1].MoveFlag);
+		UnitChoice(tyatora[1].x, tyatora[1].y, &tyatora[1].MoveFlag);
+
+		break;
+	case MOVE://猫を移動させる
+
+		//選択用のカーソルを移動させる関数
+		MoveCursor();
+
+		UnitMove(&mike[1].x, &mike[1].y, mike[1].MoveFlag);
+		UnitMove(&kuro[1].x, &kuro[1].y, kuro[1].MoveFlag);
+		UnitMove(&tyatora[1].x, &tyatora[1].y, tyatora[1].MoveFlag);
+
+		break;
+	case COMMAND://待機、攻撃、戻るといった行動を決めるコマンド選択
+
+		//移動したその場から四方を調べて攻撃可能なマスがあるかを調べる
+		for (int i = 0; i < CHACKNUM; i++)
+		{
+			AttackSearchX = CursorX + ChackDirectionX[i];
+			AttackSearchY = CursorY + ChackDirectionY[i];
+
+			//上、下、右、左の何処かに攻撃可能マスがあれば
+			//攻撃コマンドを表示させる
+			if (Map[AttackSearchY][AttackSearchX] == -4)
+			{
+				AttackCommandDisplay = true;
+			}
+			else if (Map[AttackSearchY][AttackSearchX] == -3)
+			{
+				Map[AttackSearchY][AttackSearchX] = -4;
+			}
+
+		}
+
+		//コマンドを選択する矢印の移動
+		CommandChoice();
+
+		break;
+
+	case ATTACKCHOICE://攻撃する敵ユニットを決定
+
+		if (AttackUnitChoiceFlag == false)
+		{
+			//攻撃対象を選択するカーソルを移動させる関数
+			MoveCursor();
+		}
+
+		if (pDi->KeyJustPressed(DIK_RETURN))
+		{
+			if (Map[CursorY][CursorX] == -4)
+			{
+				//フラグをtrueにして移動開始
+				AttackUnitChoiceFlag = true;
+			}
+		}
+
+		AttackMotion(mike[1].x, mike[1].y, &mike[1].AttackPosX, &mike[1].AttackPosY, &mike[1].MoveFlag);
+		AttackMotion(kuro[1].x, kuro[1].y, &kuro[1].AttackPosX, &kuro[1].AttackPosY, &kuro[1].MoveFlag);
+		AttackMotion(tyatora[1].x, tyatora[1].y, &tyatora[1].AttackPosX, &tyatora[1].AttackPosY, &tyatora[1].MoveFlag);
+		break;
+	}
+}
+
+//マップの数値をリセットする関数
+void GameState::MapReset()
+{
+	//マップをリセット
+	for (int y = 0; y < MAPSIZE; y++)
+	{
+		for (int x = 0; x < MAPSIZE; x++)
+		{
+			//移動不可能な場所は-2にしておく
+			//それ以外の場所は移動可能場所として-1に
+			if (y == 0 || x == 0 || y == 8 || x == 8)
+			{
+				Map[y][x] = -2;
+			}
+			else
+			{
+				Map[y][x] = -1;
+			}
+		}
+	}
+
+}
+
+//コマンドを操作する関数
+void GameState::CommandPlay(int *x,int *y,bool flag)
+{
+	DirectInput* pDi = DirectInput::GetInstance();
+
+	//選択するコマンドによって変化
+	switch (command)
+	{
+	case ATTACK://攻撃フェーズに遷移
+
+		//矢印の位置を変更
+		TheArrowSprite.SetPos(650, 450);
+		if (pDi->KeyJustPressed(DIK_RETURN))
+		{
+			playerstate = ATTACKCHOICE;
+		}
+		break;
+	case STANDBY://その場に待機する
+		//矢印の位置を変更
+		TheArrowSprite.SetPos(650, 550);
+		if (pDi->KeyJustPressed(DIK_RETURN))
+		{
+			playerstate = CHOICE;
+		}
+		break;
+	case BACK://元の場所へ戻る
+		//矢印の位置を変更
+		TheArrowSprite.SetPos(650, 650);
+		if (pDi->KeyJustPressed(DIK_RETURN))
+		{
+			if (flag == true)
+			{
+				*x = BeforeMapNumX;
+				*y = BeforeMapNumY;
+			}
+			playerstate = CHOICE;
+		}
+		break;
 	}
 }

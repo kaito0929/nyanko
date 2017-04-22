@@ -37,14 +37,12 @@ Mikeneko::~Mikeneko()
 //初期化関数
 void Mikeneko::Initialize()
 {
-	x = 4;
-	y = 3;
 
 	AttackPosX = 100;
 	AttackPosY = 100;
 
 	AliveFlag = true;
-	MoveFlag = true;
+	MoveFlag = false;
 
 	//三毛猫のテクスチャの初期化
 	MikenekoTex.Load("Material/mikeneko.png");
@@ -83,14 +81,12 @@ Kuroneko::~Kuroneko()
 //初期化関数
 void Kuroneko::Initialize()
 {
-	x = 5;
-	y = 3;
 
 	AttackPosX = 100;
 	AttackPosY = 100;
 
 	AliveFlag = true;
-	MoveFlag = true;
+	MoveFlag = false;
 
 	//黒猫のテクスチャの初期化
 	KuronekoTex.Load("Material/kuroneko.png");
@@ -130,14 +126,12 @@ Tyatora::~Tyatora()
 //初期化関数
 void Tyatora::Initialize()
 {
-	x = 3;
-	y = 3;
 
 	AttackPosX = 100;
 	AttackPosY = 100;
 
 	AliveFlag = true;
-	MoveFlag = true;
+	MoveFlag = false;
 
 	//茶トラのテクスチャの初期化
 	TyatoraTex.Load("Material/tyatora.png");
