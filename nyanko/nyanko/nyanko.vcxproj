@@ -87,7 +87,11 @@
     <ClCompile Include="DirectSound.cpp" />
     <ClCompile Include="Game\Character.cpp" />
     <ClCompile Include="Game\GameState.cpp" />
+    <ClCompile Include="Game\Title.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="Scene\BaseScene.cpp" />
+    <ClCompile Include="Scene\ISceneChanger.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="SoundBuffer.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -104,8 +108,13 @@
     <ClInclude Include="DirectSound.h" />
     <ClInclude Include="Game\Character.h" />
     <ClInclude Include="Game\GameState.h" />
+    <ClInclude Include="Game\Title.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="MyVector.h" />
+    <ClInclude Include="Scene\BaseScene.h" />
+    <ClInclude Include="Scene\ISceneChanger.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\Task.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundBuffer.h" />
     <ClInclude Include="Sprite.h" />

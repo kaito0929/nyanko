@@ -17,6 +17,7 @@
 #include "BoundingBox.h"
 
 #include "Game/GameState.h"
+#include "Game/Title.h"
 
 
 void ObbMove(OrientedBoundingBox& obb,float rotate, D3DXVECTOR3 pos)
@@ -197,6 +198,9 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	GameState gamestate;
 	gamestate.Initialize();
+
+	Title title;
+	title.Initialize();
 	
 
 	MSG msg = {};

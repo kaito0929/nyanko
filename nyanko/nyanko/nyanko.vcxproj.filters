@@ -16,6 +16,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{c7c9b340-4fff-4b89-a769-8f9a5eb611c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{9c14dc0a-77cc-4958-a26a-62206030c1c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\GameState.cpp">
@@ -63,6 +66,18 @@
     <ClCompile Include="Game\Character.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Title.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\BaseScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ISceneChanger.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameState.h">
@@ -109,6 +124,21 @@
     </ClInclude>
     <ClInclude Include="Game\Character.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Title.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\BaseScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ISceneChanger.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Task.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,7 +8,9 @@
 #include "../DirectSound.h"
 #include "../SoundBuffer.h"
 
+#include "../Base"
 #include "Character.h"
+
 
 #define CHACKNUM 4
 #define MAPSIZE 9
@@ -56,7 +58,7 @@ enum PlayerTurn
 	SecondPlayer_Turn,
 };
 
-class GameState
+class GameState : public
 {
 private:
 
