@@ -191,7 +191,7 @@ public:
 	void UnitMove(int *x, int *y,bool flag);
 
 	//マップの数値を変えるための関数
-	void MapChange(int x, int y, bool flag);
+	void MapChange();
 
 	//1Pの行動関数
 	void FirstPlayer_Update();
@@ -204,4 +204,7 @@ public:
 
 	//コマンドを操作する関数
 	void CommandPlay(int *x,int *y,bool flag);
+
+	//ユニット同士の戦闘の処理を行う関数
+	void UnitBattle();
 };

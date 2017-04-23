@@ -43,6 +43,9 @@ void Mikeneko::Initialize()
 
 	AliveFlag = true;
 	MoveFlag = false;
+	AttackChoiceFlag = false;
+
+	cat = MIKE;
 
 	//三毛猫のテクスチャの初期化
 	MikenekoTex.Load("Material/mikeneko.png");
@@ -50,6 +53,9 @@ void Mikeneko::Initialize()
 	MikenekoSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
 	MikenekoSprite.SetSize(100, 100);
+
+	//キャラの体力は3
+	HitPoint = 3;
 }
 //描画関数
 void Mikeneko::Draw()
@@ -63,6 +69,11 @@ void Mikeneko::Draw()
 void Mikeneko::Update()
 {
 	MikenekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+}
+
+void Mikeneko::UnitBattle(CatState cat1,CatState cat2,int *hp)
+{
+
 }
 
 //=====================================================
@@ -87,6 +98,10 @@ void Kuroneko::Initialize()
 
 	AliveFlag = true;
 	MoveFlag = false;
+	AttackChoiceFlag = false;
+
+
+	cat = KURO;
 
 	//黒猫のテクスチャの初期化
 	KuronekoTex.Load("Material/kuroneko.png");
@@ -94,6 +109,9 @@ void Kuroneko::Initialize()
 	KuronekoSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
 	KuronekoSprite.SetSize(100, 100);
+
+	//キャラの体力は3
+	HitPoint = 3;
 	
 }
 //描画関数
@@ -132,6 +150,10 @@ void Tyatora::Initialize()
 
 	AliveFlag = true;
 	MoveFlag = false;
+	AttackChoiceFlag = false;
+
+
+	cat = TYATORA;
 
 	//茶トラのテクスチャの初期化
 	TyatoraTex.Load("Material/tyatora.png");
@@ -139,6 +161,9 @@ void Tyatora::Initialize()
 	TyatoraSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
 	TyatoraSprite.SetSize(100, 100);
+
+	//キャラの体力は3
+	HitPoint = 3;
 }
 //描画関数
 void Tyatora::Draw()

@@ -7,6 +7,13 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
+//猫を区別するためのステータス
+enum CatState
+{
+	MIKE,		//三毛猫
+	KURO,		//黒猫
+	TYATORA,	//茶トラ
+};
 
 //================================================================
 //クラス名  ：Characterクラス
@@ -38,6 +45,15 @@ public:
 
 	//移動中かのフラグ
 	bool MoveFlag;
+
+	//キャラクターの体力
+	int HitPoint;
+
+	///攻撃対象として選ばれたかのフラグ
+	bool AttackChoiceFlag;
+
+	//猫のステータス
+	CatState cat;
 };
 
 
@@ -66,6 +82,9 @@ public:
 	void Update();
 	//描画
 	void Draw();
+
+	//ユニット同士の戦闘の処理を行う関数
+	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
 };
 
 //================================================================
@@ -93,6 +112,9 @@ public:
 	void Update();
 	//描画
 	void Draw();
+
+	//ユニット同士の戦闘の処理を行う関数
+	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
 };
 
 //================================================================
@@ -120,4 +142,7 @@ public:
 	void Update();
 	//描画
 	void Draw();
+
+	//ユニット同士の戦闘の処理を行う関数
+	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
 };
