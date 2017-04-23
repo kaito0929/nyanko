@@ -7,6 +7,8 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
+int h = 3;
+
 //=====================================================
 //■Characterクラス■
 //=====================================================
@@ -60,20 +62,47 @@ void Mikeneko::Initialize()
 //描画関数
 void Mikeneko::Draw()
 {
-	if (AliveFlag == true)
-	{
-		Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
-	}
+	Direct3D::SetRenderState(RENDER_ALPHABLEND);
+	Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
 }
 //実際に動かす関数
 void Mikeneko::Update()
 {
 	MikenekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	if (HitPoint <= 0)
+	{
+		AliveFlag = false;
+	}
+
+	UnitFade();
 }
 
-void Mikeneko::UnitBattle(CatState cat1,CatState cat2,int *hp)
+//ユニットがやられた時にテクスチャをフェードアウトさせる
+void Mikeneko::UnitFade()
 {
+	if (AliveFlag == false)
+	{
+		MikenekoSprite.SetAlpha(MikenekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+	}
+}
 
+//攻撃する相手によって処理を変える関数
+void Mikeneko::UnitBattle(CatState cat, int *hp, bool attackFlag)
+{
+	if (attackFlag == true && MoveFlag == true)
+	{
+		//cat1が三毛猫の場合に処理する戦闘結果
+		if (cat == TYATORA)
+		{
+			//h - 2;
+			*hp -= 2;
+		}
+		else if (cat == MIKE)
+		{
+			*hp -= 1;
+		}
+	}
 }
 
 //=====================================================
@@ -117,15 +146,44 @@ void Kuroneko::Initialize()
 //描画関数
 void Kuroneko::Draw()
 {
-	if (AliveFlag == true)
-	{
-		Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);
-	}
+	Direct3D::SetRenderState(RENDER_ALPHABLEND);
+	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);
 }
 //実際に動かす関数
 void Kuroneko::Update()
 {
 	KuronekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	if (HitPoint <= 0)
+	{
+		AliveFlag = false;
+	}
+
+	UnitFade();
+}
+
+void Kuroneko::UnitBattle(CatState cat, int *hp, bool attackFlag)
+{
+	if (attackFlag == true && MoveFlag == true)
+	{
+		//cat1が黒猫の場合に処理する戦闘結果
+		if (cat == MIKE)
+		{
+			*hp -= 2;
+		}
+		else if (cat == KURO)
+		{
+			*hp -= 1;
+		}
+	}
+}
+
+void Kuroneko::UnitFade()
+{
+	if (AliveFlag == false)
+	{
+		KuronekoSprite.SetAlpha(KuronekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+	}
 }
 
 //=====================================================
@@ -168,13 +226,42 @@ void Tyatora::Initialize()
 //描画関数
 void Tyatora::Draw()
 {
-	if (AliveFlag == true)
-	{
-		Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
-	}
+	Direct3D::SetRenderState(RENDER_ALPHABLEND);
+	Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
 }
 //実際に動かす関数
 void Tyatora::Update()
 {
 	TyatoraSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	if (HitPoint <= 0)
+	{
+		AliveFlag = false;
+	}
+
+	UnitFade();
+}
+
+void Tyatora::UnitBattle(CatState cat, int *hp, bool attackFlag)
+{
+	if (attackFlag == true && MoveFlag == true)
+	{
+		//cat1が茶トラの場合に処理する戦闘結果
+		if (cat == KURO)
+		{
+			*hp - 2;
+		}
+		else if (cat == TYATORA)
+		{
+			*hp - 1;
+		}
+	}
+}
+
+void Tyatora::UnitFade()
+{
+	if (AliveFlag == false)
+	{
+		TyatoraSprite.SetAlpha(TyatoraSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+	}
 }

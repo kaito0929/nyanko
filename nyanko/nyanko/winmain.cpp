@@ -161,7 +161,7 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	HWND hWnd=NULL;
 
-	if (FAILED(MakeWindow(hInstance,hWnd, 1600, 900)))
+	if (FAILED(MakeWindow(hInstance,hWnd, 1200, 1000)))
 	{
 		return 0;
 	}

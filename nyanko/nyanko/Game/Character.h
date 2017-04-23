@@ -84,7 +84,10 @@ public:
 	void Draw();
 
 	//ユニット同士の戦闘の処理を行う関数
-	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
+	void UnitBattle(CatState Cat, int *hp, bool attackFlag);
+
+	//ユニットをフェードアウトさせる関数
+	void UnitFade();
 };
 
 //================================================================
@@ -114,7 +117,10 @@ public:
 	void Draw();
 
 	//ユニット同士の戦闘の処理を行う関数
-	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
+	void UnitBattle(CatState Cat, int *hp, bool attackFlag);
+
+	//ユニットをフェードアウトさせる関数
+	void UnitFade();
 };
 
 //================================================================
@@ -144,5 +150,8 @@ public:
 	void Draw();
 
 	//ユニット同士の戦闘の処理を行う関数
-	void UnitBattle(CatState cat1, CatState Cat2, int *hp);
+	void UnitBattle(CatState Cat, int *hp, bool attackFlag);
+
+	//ユニットをフェードアウトさせる関数
+	void UnitFade();
 };

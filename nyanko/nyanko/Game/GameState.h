@@ -60,10 +60,6 @@ class GameState
 {
 private:
 
-	////白猫のテクスチャ
-	//Texture ShironekoTex;
-	//Sprite ShironekoSprite;
-
 	//移動できる範囲のマス
 	Texture MoveSquaresTex;
 	Sprite MoveSquaresSprite;
@@ -92,8 +88,9 @@ private:
 	Texture TheArrowTex;
 	Sprite TheArrowSprite;
 
-	//白猫の座標
-	//Cat shiro;
+	//背景のテクスチャ
+	Texture BackGroundTex;
+	Sprite BackGroundSprite;
 
 	//プレイヤーの行動手順
 	PlayerState playerstate;
@@ -125,8 +122,8 @@ private:
 	//移動位置を決める際のフラグ
 	bool MoveChoiceFlag;
 
-	//残り移動回数
-	//ユニットは三回移動することが出来る
+	//残り移動範囲
+	//ユニットは三マス移動することが出来る
 	int MoveCount;
 
 	//攻撃コマンドを表示するかのフラグ
@@ -179,10 +176,7 @@ public:
 	void CommandChoice();
 
 	//攻撃しているように動かす関数
-	void AttackMotion(int x,int y,int *attackPosX,int *attackPosY,bool *flag);
-
-	//ユニットをフェードアウトさせる関数
-	void UnitFade();
+	void AttackMotion(int x,int y,int *attackPosX,int *attackPosY,bool *moveFlag);
 
 	//動かすユニットを決定
 	void UnitChoice(int x, int y,bool *flag);
@@ -191,7 +185,7 @@ public:
 	void UnitMove(int *x, int *y,bool flag);
 
 	//マップの数値を変えるための関数
-	void MapChange();
+	void MapChange(int x,int y,bool flag);
 
 	//1Pの行動関数
 	void FirstPlayer_Update();
@@ -207,4 +201,8 @@ public:
 
 	//ユニット同士の戦闘の処理を行う関数
 	void UnitBattle();
+
+	//攻撃対象として選ばれたかのフラグを操作する関数
+	void AttackFlag(int x, int y, int cursorX, int cursorY, bool*flag);
+
 };
