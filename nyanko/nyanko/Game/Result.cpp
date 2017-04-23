@@ -1,4 +1,3 @@
-#include "Title.h"
 #include "../directInput.h"
 #include "../Texture.h"
 #include "../Sprite.h"
@@ -7,24 +6,30 @@
 #include "../DirectSound.h"
 #include "../SoundBuffer.h"
 
+#include "Result.h"
+#include "GameState.h"
 
-
-Title::Title(ISceneChanger* changer) : BaseScene(changer)
+Result::Result(ISceneChanger* changer) : BaseScene(changer)
 {
 
 }
 
-Title::~Title()
+Result::~Result()
 {
 
 }
 
-void Title::Initialize()
+void Result::Initialize()
 {
-	//タイトルロゴ
-	TitleTex.Load("Material/title.png");
-	TitleSprite.SetPos(600, 500);
-	TitleSprite.SetSize(1200, 1100);
+	//1Pが勝利した場合に表示する画面
+	FirstPlayerVictoryTex.Load("Material/result1.png");
+	FirstPlayerVictorySprite.SetPos(600, 500);
+	FirstPlayerVictorySprite.SetSize(1200, 1100);
+
+	//2Pが勝利した場合に表示する画面
+	SecondPlayerVictoryTex.Load("Material/result2.png");
+	SecondPlayerVictorySprite.SetPos(600, 500);
+	SecondPlayerVictorySprite.SetSize(1200, 1100);
 
 	//エンターを押すように指示するテクスチャ
 	EnterTex.Load("Material/enter.png");
@@ -38,13 +43,18 @@ void Title::Initialize()
 	FadeSprite.SetAlpha(0);
 }
 
-
-void Title::Draw()
+void Result::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
 
-	//タイトル画面の描画
-	Direct3D::DrawSprite(TitleSprite, TitleTex);
+	if (SecondPlayerLosingFlag == true)
+	{
+		Direct3D::DrawSprite(FirstPlayerVictorySprite, FirstPlayerVictoryTex);
+	}
+	if (FirstPlayerLosingFlag == true)
+	{
+		Direct3D::DrawSprite(SecondPlayerVictorySprite, SecondPlayerVictoryTex);
+	}
 
 	if (EnterFlashingNum == 0)
 	{
@@ -54,9 +64,10 @@ void Title::Draw()
 
 	//フェードアウト用の画像を描画
 	Direct3D::DrawSprite(FadeSprite, FadeTex);
+
 }
 
-void Title::Update()
+void Result::Update()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
@@ -81,7 +92,6 @@ void Title::Update()
 	}
 	//==================================================================================================
 
-
 	//エンターキーを押したならフラグをtrueにしてフェードアウト開始
 	if (pDi->KeyJustPressed(DIK_RETURN))
 	{
@@ -96,8 +106,6 @@ void Title::Update()
 	//完全に画面が暗くなったならシーンをメインゲームに変更
 	if (FadeSprite.GetAlpha() == 1)
 	{
-		mSceneChanger->ChangeScene(STATE_MAIN);
+		mSceneChanger->ChangeScene(STATE_TITLE);
 	}
 }
-
-

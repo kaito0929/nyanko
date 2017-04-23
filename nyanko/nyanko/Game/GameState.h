@@ -8,7 +8,9 @@
 #include "../DirectSound.h"
 #include "../SoundBuffer.h"
 
-#include "../Base"
+#include "../Scene/SceneManager.h"
+#include "../Scene/ISceneChanger.h"
+#include "../Scene/BaseScene.h"
 #include "Character.h"
 
 
@@ -21,7 +23,14 @@
 #define PLUS_ATTACK_NUM 120
 
 //フェードアウト用の数値
-#define FADE_OUT_CHANGENUM -1 
+#define FADE_OUT_CHANGENUM 1 
+
+//フェードイン用の数値
+#define FADE_IN_CHANGENUM -1 
+
+extern bool FirstPlayerLosingFlag;
+extern bool SecondPlayerLosingFlag;
+
 
 //基本的なプレイヤーの操作
 enum PlayerState
@@ -58,7 +67,7 @@ enum PlayerTurn
 	SecondPlayer_Turn,
 };
 
-class GameState : public
+class GameState : public BaseScene
 {
 private:
 
@@ -93,6 +102,10 @@ private:
 	//背景のテクスチャ
 	Texture BackGroundTex;
 	Sprite BackGroundSprite;
+
+	//フェードイン用のテクスチャ
+	Texture FadeTex;
+	Sprite FadeSprite;
 
 	//プレイヤーの行動手順
 	PlayerState playerstate;
@@ -139,8 +152,6 @@ private:
 	int BeforeMapNumX;
 	int BeforeMapNumY;
 
-	//生存フラグ
-	bool AliveFlag;	
 
 	//攻撃するユニットを決めたかのフラグ
 	bool AttackUnitChoiceFlag;
@@ -157,16 +168,16 @@ private:
 
 public:
 	//コンストラクタ
-	GameState();			
+	GameState::GameState(ISceneChanger* changer);
 	//デストラクタ
 	~GameState();			
 
 	//初期化
-	void Initialize();	
+	void Initialize() override;
 	//実際の動き
-	void Update();			
+	void Update() override;
 	//描画
-	void Draw();			
+	void Draw() override;
 
 	//移動できる位置を見つける関数
 	void Search();
@@ -206,5 +217,4 @@ public:
 
 	//攻撃対象として選ばれたかのフラグを操作する関数
 	void AttackFlag(int x, int y, int cursorX, int cursorY, bool*flag);
-
 };

@@ -7,6 +7,9 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
+//フェードアウト用の数値
+#define CAT_FADE_OUT_CHANGENUM -1 
+
 //猫を区別するためのステータス
 enum CatState
 {
@@ -54,6 +57,12 @@ public:
 
 	//猫のステータス
 	CatState cat;
+
+	//ヒットポイントのハートのテクスチャ
+	Texture HitPointTex;
+	Sprite HitPointSprite[3];
+
+	float HitPointPos[3];
 };
 
 

@@ -12,16 +12,19 @@
 #include "../Scene/ISceneChanger.h"
 #include "../Scene/BaseScene.h"
 
-//フェードアウト用の数値
-#define FADE_OUT_CHANGENUM 1 
+#include "GameState.h"
 
-class Title : public BaseScene
+class Result : public BaseScene
 {
 private:
 
-	//タイトルのテクスチャ
-	Texture TitleTex;
-	Sprite TitleSprite;
+	//1Pが勝利した場合に表示するテクスチャ
+	Texture FirstPlayerVictoryTex;
+	Sprite FirstPlayerVictorySprite;
+
+	//2Pが勝利した場合に表示するテクスチャ
+	Texture SecondPlayerVictoryTex;
+	Sprite SecondPlayerVictorySprite;
 
 	//エンターキーを押してもらう指示のテクスチャ
 	Texture EnterTex;
@@ -41,9 +44,9 @@ private:
 
 public:
 	//コンストラクタ
-	Title::Title(ISceneChanger* changer);
+	Result::Result(ISceneChanger* changer);
 	//デストラクタ
-	~Title();
+	~Result();
 
 	//初期化
 	void Initialize() override;
@@ -51,5 +54,4 @@ public:
 	void Update() override;
 	//描画
 	void Draw() override;
-
 };

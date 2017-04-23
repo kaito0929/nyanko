@@ -1,6 +1,6 @@
 #include "BaseScene.h"
 
-BaseScene::BaseScene(ISceneChanger* changer) : mImageHandle(0) 
+BaseScene::BaseScene(ISceneChanger* changer) : mImageHandle(0)
 {
 	mSceneChanger = changer;
 }

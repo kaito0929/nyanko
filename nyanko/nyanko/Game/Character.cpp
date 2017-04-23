@@ -56,6 +56,17 @@ void Mikeneko::Initialize()
 	//大きさの設定
 	MikenekoSprite.SetSize(100, 100);
 
+	HitPointTex.Load("Material/heart_gloss.png");
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetSize(30, 30);
+		HitPointSprite[i].SetPos(x, y);
+	}
+
+	HitPointPos[0] = 0.7;
+	HitPointPos[1] = 1.0;
+	HitPointPos[2] = 1.3;
+
 	//キャラの体力は3
 	HitPoint = 3;
 }
@@ -64,11 +75,21 @@ void Mikeneko::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
 	Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
+
+	for (int i = 0; i < HitPoint; i++)
+	{
+		Direct3D::DrawSprite(HitPointSprite[i], HitPointTex);
+	}
 }
 //実際に動かす関数
 void Mikeneko::Update()
 {
 	MikenekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+	}
 
 	if (HitPoint <= 0)
 	{
@@ -83,7 +104,7 @@ void Mikeneko::UnitFade()
 {
 	if (AliveFlag == false)
 	{
-		MikenekoSprite.SetAlpha(MikenekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+		MikenekoSprite.SetAlpha(MikenekoSprite.GetAlpha() + (0.1f*CAT_FADE_OUT_CHANGENUM));
 	}
 }
 
@@ -95,7 +116,6 @@ void Mikeneko::UnitBattle(CatState cat, int *hp, bool attackFlag)
 		//cat1が三毛猫の場合に処理する戦闘結果
 		if (cat == TYATORA)
 		{
-			//h - 2;
 			*hp -= 2;
 		}
 		else if (cat == MIKE)
@@ -139,6 +159,17 @@ void Kuroneko::Initialize()
 	//大きさの設定
 	KuronekoSprite.SetSize(100, 100);
 
+	HitPointTex.Load("Material/heart_gloss.png");
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetSize(30, 30);
+		HitPointSprite[i].SetPos(x, y);
+	}
+
+	HitPointPos[0] = 0.7;
+	HitPointPos[1] = 1.0;
+	HitPointPos[2] = 1.3;
+
 	//キャラの体力は3
 	HitPoint = 3;
 	
@@ -148,11 +179,21 @@ void Kuroneko::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
 	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);
+
+	for (int i = 0; i < HitPoint; i++)
+	{
+		Direct3D::DrawSprite(HitPointSprite[i], HitPointTex);
+	}
 }
 //実際に動かす関数
 void Kuroneko::Update()
 {
 	KuronekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+	}
 
 	if (HitPoint <= 0)
 	{
@@ -182,7 +223,7 @@ void Kuroneko::UnitFade()
 {
 	if (AliveFlag == false)
 	{
-		KuronekoSprite.SetAlpha(KuronekoSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+		KuronekoSprite.SetAlpha(KuronekoSprite.GetAlpha() + (0.1f*CAT_FADE_OUT_CHANGENUM));
 	}
 }
 
@@ -210,7 +251,6 @@ void Tyatora::Initialize()
 	MoveFlag = false;
 	AttackChoiceFlag = false;
 
-
 	cat = TYATORA;
 
 	//茶トラのテクスチャの初期化
@@ -220,6 +260,17 @@ void Tyatora::Initialize()
 	//大きさの設定
 	TyatoraSprite.SetSize(100, 100);
 
+	HitPointTex.Load("Material/heart_gloss.png");
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetSize(30, 30);
+		HitPointSprite[i].SetPos(x, y);
+	}
+
+	HitPointPos[0] = 0.7;
+	HitPointPos[1] = 1.0;
+	HitPointPos[2] = 1.3;
+
 	//キャラの体力は3
 	HitPoint = 3;
 }
@@ -228,11 +279,21 @@ void Tyatora::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
 	Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
+
+	for (int i = 0; i < HitPoint; i++)
+	{
+		Direct3D::DrawSprite(HitPointSprite[i], HitPointTex);
+	}
 }
 //実際に動かす関数
 void Tyatora::Update()
 {
 	TyatoraSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
+
+	for (int i = 0; i < 3; i++)
+	{
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+	}
 
 	if (HitPoint <= 0)
 	{
@@ -246,14 +307,14 @@ void Tyatora::UnitBattle(CatState cat, int *hp, bool attackFlag)
 {
 	if (attackFlag == true && MoveFlag == true)
 	{
-		//cat1が茶トラの場合に処理する戦闘結果
+		//cat1が黒猫の場合に処理する戦闘結果
 		if (cat == KURO)
 		{
-			*hp - 2;
+			*hp -= 2;
 		}
 		else if (cat == TYATORA)
 		{
-			*hp - 1;
+			*hp -= 1;
 		}
 	}
 }
@@ -262,6 +323,6 @@ void Tyatora::UnitFade()
 {
 	if (AliveFlag == false)
 	{
-		TyatoraSprite.SetAlpha(TyatoraSprite.GetAlpha() + (0.1f*FADE_OUT_CHANGENUM));
+		TyatoraSprite.SetAlpha(TyatoraSprite.GetAlpha() + (0.1f*CAT_FADE_OUT_CHANGENUM));
 	}
 }

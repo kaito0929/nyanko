@@ -10,8 +10,13 @@
 #include <stdlib.h>	//rand()関数用
 #include <time.h>	//time()関数用
 
+//1Pの敗北フラグ
+bool FirstPlayerLosingFlag = false;
+//2Pの敗北フラグ
+bool SecondPlayerLosingFlag = false;
 
-GameState::GameState()
+
+GameState::GameState(ISceneChanger* changer) : BaseScene(changer)
 {
 	
 }
@@ -94,6 +99,12 @@ void GameState::Initialize()
 	BackGroundSprite.SetSize(1200, 1000);
 	BackGroundSprite.SetPos(650, 450);
 
+	//フェードアウト用のテクスチャ
+	FadeTex.Load("Material/fade_b.png");
+	FadeSprite.SetPos(600, 500);
+	FadeSprite.SetSize(1200, 1100);
+	FadeSprite.SetAlpha(1);
+
 	playerstate = CHOICE;
 	command = ATTACK;
 	attack = INITIALSTATE;
@@ -103,7 +114,6 @@ void GameState::Initialize()
 	AttackSearchX = 0;
 	AttackSearchY = 0;
 
-	AliveFlag = true;
 
 	for (int y = 0; y < MAPSIZE; y++)
 	{
@@ -140,12 +150,16 @@ void GameState::Initialize()
 	AttackUnitChoiceFlag = false;
 	AttackCompleteFlag = false;
 
+	FirstPlayerLosingFlag = false;
+	SecondPlayerLosingFlag = false;
+
 }
 
 void GameState::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
 
+	//背景の描画
 	Direct3D::DrawSprite(BackGroundSprite, BackGroundTex);
 
 	for (int y = 0; y < MAPSIZE; y++)
@@ -199,20 +213,44 @@ void GameState::Draw()
 		//選択用の矢印
 		Direct3D::DrawSprite(TheArrowSprite, TheArrowTex);
 	}
+
+	//フェードアウト用の画像を描画
+	Direct3D::DrawSprite(FadeSprite, FadeTex);
 }
 
 void GameState::Update()
 {
+	if (FirstPlayerLosingFlag == false && SecondPlayerLosingFlag == false)
+	{
+		//フェードインを行う
+		FadeSprite.SetAlpha(FadeSprite.GetAlpha() + (0.01f*FADE_IN_CHANGENUM));
+	}
+	else if (FirstPlayerLosingFlag == true || SecondPlayerLosingFlag == true)
+	{
+		//フェードアウトを行う
+		FadeSprite.SetAlpha(FadeSprite.GetAlpha() + (0.01f*FADE_OUT_CHANGENUM));
+
+		if (FadeSprite.GetAlpha() == 1)
+		{
+			mSceneChanger->ChangeScene(STATE_RESULT);
+		}
+	}
+
+	//カーソルの位置を変更できるようにここで処理
+	CursorSprite.SetPos((CursorX + 1) * 100, (CursorY + 1) * 100);
+
+
+	//移動可能範囲の表示関数
+	Search();
+
 	for (int i = 0; i < 2; i++)
 	{
 		mike[i].Update();
 		kuro[i].Update();
 		tyatora[i].Update();
-	}
 
-	if (playerstate == CHOICE)
-	{
-		for (int i = 0; i < 2; i++)
+		//両プレイヤー共通の処理なので分ける必要はないのでここで処理
+		if (playerstate == CHOICE)
 		{
 			//移動中かどうかのフラグをfalseにしておく
 			mike[i].MoveFlag = false;
@@ -224,13 +262,8 @@ void GameState::Update()
 			tyatora[i].AttackChoiceFlag = false;
 		}
 	}
-
-	CursorSprite.SetPos((CursorX + 1) * 100, (CursorY + 1) * 100);
-
-
-	//移動可能範囲の表示関数
-	Search();
 	
+
 	switch (playerTurn)
 	{
 	case FirstPlayer_Turn:
@@ -241,7 +274,21 @@ void GameState::Update()
 		//2Pの行動
 		SecondPlayer_Update();
 		break;
-	}	
+	}
+
+	//1Pが全滅した場合に負けフラグをtrueにする
+	//その後でリザルト画面へ遷移
+	if (mike[0].AliveFlag == false && kuro[0].AliveFlag == false && tyatora[0].AliveFlag == false)
+	{
+		FirstPlayerLosingFlag = true;
+	}
+	//2Pが全滅した場合に負けフラグをtrueにする
+	//その後でリザルト画面へ遷移
+	else if (mike[1].AliveFlag == false && kuro[1].AliveFlag == false && tyatora[1].AliveFlag == false)
+	{
+		SecondPlayerLosingFlag = true;
+	}
+
 }
 
 //移動可能範囲の表示関数
@@ -344,7 +391,7 @@ void GameState::MoveCursor()
 	}
 }
 
-//攻撃か待機かを選ぶ矢印を操作する関数
+//攻撃か待機か戻るかを選ぶ矢印を操作する関数
 void GameState::CommandChoice()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
@@ -591,8 +638,8 @@ void GameState::UnitMove(int *x, int *y,bool flag)
 
 	if (pDi->KeyJustPressed(DIK_RETURN))
 	{
-		//カーソルの位置が-1以上3未満ならば処理
-		if (Map[CursorY][CursorX] > -1 && Map[CursorY][CursorX] != 3 && flag == true)
+		//カーソルの位置が-1以上ならば処理
+		if (Map[CursorY][CursorX] > -1 && flag == true)
 		{
 			//猫をカーソルの位置へ移動
 			*x = CursorX;

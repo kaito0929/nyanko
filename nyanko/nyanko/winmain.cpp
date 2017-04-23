@@ -196,11 +196,8 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	Camera camera;
 
-	GameState gamestate;
-	gamestate.Initialize();
-
-	Title title;
-	title.Initialize();
+	SceneManager scenemanager;
+	scenemanager.Initialize();
 	
 
 	MSG msg = {};
@@ -231,7 +228,7 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			
 			pDi->Update();
 
-			gamestate.Update();
+			scenemanager.Update();
 			
 			//描画処理
 			//コマ落ちさせる場合は処理を飛ばすことがある
@@ -242,7 +239,7 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				//ビュー行列の更新
 				camera.UpdateViewMatrix();
 
-				gamestate.Draw();
+				scenemanager.Draw();
 
 				pDirect3d->EndScene();
 				pDirect3d->Present();

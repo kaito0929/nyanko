@@ -1,3 +1,6 @@
+#include "../Game/GameState.h"
+#include "../Game/Title.h"
+#include "../Game/Result.h"
 #include "SceneManager.h"
 
 
@@ -31,7 +34,7 @@ void SceneManager::Update()
 			mScene = (BaseScene*)new Title(this);	//タイトル画面のインスタンスを生成する
 			break;
 		case STATE_MAIN:
-			mScene = (BaseScene*)new Floor1Update(this);
+			mScene = (BaseScene*)new GameState(this);
 			break;
 		case STATE_RESULT:
 			mScene = (BaseScene*)new Result(this);
