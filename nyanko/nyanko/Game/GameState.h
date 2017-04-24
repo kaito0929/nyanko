@@ -13,6 +13,8 @@
 #include "../Scene/BaseScene.h"
 #include "Character.h"
 
+#include "Sound.h"
+#include "SoundEffect.h"
 
 #define CHACKNUM 4
 #define MAPSIZE 9
@@ -67,6 +69,13 @@ enum PlayerTurn
 	SecondPlayer_Turn,
 };
 
+//ターン切り替えのカットインのための状態
+enum Fade
+{
+	FADE_IN,
+	FADE_OUT,
+};
+
 class GameState : public BaseScene
 {
 private:
@@ -103,6 +112,14 @@ private:
 	Texture BackGroundTex;
 	Sprite BackGroundSprite;
 
+	//ターン切り替えのカットイン用のテクスチャ(1P)
+	Texture CutIn_FirstPlayerTex;
+	Sprite CutIn_FirstPlayerSprite;
+
+	//ターン切り替えのカットイン用のテクスチャ(2P)
+	Texture CutIn_SecondPlayerTex;
+	Sprite CutIn_SecondPlayerSprite;
+
 	//フェードイン用のテクスチャ
 	Texture FadeTex;
 	Sprite FadeSprite;
@@ -118,6 +135,9 @@ private:
 
 	//プレイヤーのターンを切り替えるための変数
 	PlayerTurn playerTurn;
+
+	//カットインのフェードインフェードアウト
+	Fade fade;
 
 	//マップデータ:9*9
 	int Map[MAPSIZE][MAPSIZE];
@@ -162,9 +182,16 @@ private:
 	//プレイヤーの行動回数
 	int PlayerActionNum;
 
-	Mikeneko mike[2];
-	Kuroneko kuro[2];
-	Tyatora tyatora[2];
+	Mikeneko mike_1P;
+	Kuroneko kuro_1P;
+	Tyatora tyatora_1P;
+
+	Mikeneko mike_2P;
+	Kuroneko kuro_2P;
+	Tyatora tyatora_2P;
+
+	Sound sound;
+	SoundEffect se;
 
 public:
 	//コンストラクタ
@@ -189,16 +216,22 @@ public:
 	void CommandChoice();
 
 	//攻撃しているように動かす関数
-	void AttackMotion(int x,int y,int *attackPosX,int *attackPosY,bool *moveFlag);
+	void AttackMotion(int x,int y,int *attackPosX,int *attackPosY,bool *moveFlag,bool *actionFlag);
 
 	//動かすユニットを決定
-	void UnitChoice(int x, int y,bool *flag);
+	void UnitChoice(int x, int y,bool *flag,bool moveFlag);
 
 	//ユニットを実際に移動させる関数
 	void UnitMove(int *x, int *y,bool flag);
 
 	//マップの数値を変えるための関数
 	void MapChange(int x,int y,bool flag);
+
+	//自分のターン中に自ユニットの位置でのマップの数値の切り替え
+	void MyTurnMapChange(int x, int y, bool flag);
+
+	//移動可能かのフラグを切り替える関数
+	void UnitMovePossidleChange(bool aliveFlag, bool *moveFlag);
 
 	//1Pの行動関数
 	void FirstPlayer_Update();
@@ -210,11 +243,14 @@ public:
 	void MapReset();
 
 	//コマンドを操作する関数
-	void CommandPlay(int *x,int *y,bool flag);
+	void CommandPlay(int *x,int *y,bool flag,bool* moveFlag);
 
 	//ユニット同士の戦闘の処理を行う関数
 	void UnitBattle();
 
 	//攻撃対象として選ばれたかのフラグを操作する関数
 	void AttackFlag(int x, int y, int cursorX, int cursorY, bool*flag);
+
+	//カットインのテクスチャのフェードインフェードアウトを行う関数
+	void CutInFade();
 };

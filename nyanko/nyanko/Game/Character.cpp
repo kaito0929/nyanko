@@ -7,7 +7,6 @@
 #include "../mesh.h"
 #include "../Direct3D.h"
 
-int h = 3;
 
 //=====================================================
 //■Characterクラス■
@@ -50,7 +49,8 @@ void Mikeneko::Initialize()
 	cat = MIKE;
 
 	//三毛猫のテクスチャの初期化
-	MikenekoTex.Load("Material/mikeneko.png");
+	MikenekoTex[0].Load("Material/mikeneko.png");
+	MikenekoTex[1].Load("Material/mikeneko2.png");
 	//座標の設定
 	MikenekoSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
@@ -69,12 +69,24 @@ void Mikeneko::Initialize()
 
 	//キャラの体力は3
 	HitPoint = 3;
+
+	MovePossidleFlag = true;
 }
 //描画関数
 void Mikeneko::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
-	Direct3D::DrawSprite(MikenekoSprite, MikenekoTex);
+
+
+	//移動した後だったり相手のターンならばユニットを白黒に
+	if (MovePossidleFlag == true)
+	{
+		Direct3D::DrawSprite(MikenekoSprite, MikenekoTex[0]);
+	}
+	else if (MovePossidleFlag == false)
+	{
+		Direct3D::DrawSprite(MikenekoSprite, MikenekoTex[1]);
+	}
 
 	for (int i = 0; i < HitPoint; i++)
 	{
@@ -86,16 +98,18 @@ void Mikeneko::Update()
 {
 	MikenekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
 
+	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
 		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
 	}
 
+	//ヒットポイントが0以下になればユニットは消滅
 	if (HitPoint <= 0)
 	{
 		AliveFlag = false;
 	}
-
+	//ユニットがフェードアウトする関数S
 	UnitFade();
 }
 
@@ -153,7 +167,8 @@ void Kuroneko::Initialize()
 	cat = KURO;
 
 	//黒猫のテクスチャの初期化
-	KuronekoTex.Load("Material/kuroneko.png");
+	KuronekoTex[0].Load("Material/kuroneko.png");
+	KuronekoTex[1].Load("Material/kuroneko2.png");
 	//座標の設定
 	KuronekoSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
@@ -172,13 +187,24 @@ void Kuroneko::Initialize()
 
 	//キャラの体力は3
 	HitPoint = 3;
+
+	MovePossidleFlag = true;
 	
 }
 //描画関数
 void Kuroneko::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
-	Direct3D::DrawSprite(KuronekoSprite, KuronekoTex);
+
+	//移動した後だったり相手のターンならばユニットを白黒に
+	if (MovePossidleFlag == true)
+	{
+		Direct3D::DrawSprite(KuronekoSprite, KuronekoTex[0]);
+	}
+	else if (MovePossidleFlag == false)
+	{
+		Direct3D::DrawSprite(KuronekoSprite, KuronekoTex[1]);
+	}
 
 	for (int i = 0; i < HitPoint; i++)
 	{
@@ -190,16 +216,18 @@ void Kuroneko::Update()
 {
 	KuronekoSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
 
+	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
 		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
 	}
 
+	//ヒットポイントが0以下になればユニットは消滅
 	if (HitPoint <= 0)
 	{
 		AliveFlag = false;
 	}
-
+	//ユニットがフェードアウトする関数S
 	UnitFade();
 }
 
@@ -254,7 +282,8 @@ void Tyatora::Initialize()
 	cat = TYATORA;
 
 	//茶トラのテクスチャの初期化
-	TyatoraTex.Load("Material/tyatora.png");
+	TyatoraTex[0].Load("Material/tyatora.png");
+	TyatoraTex[1].Load("Material/tyatora2.png");
 	//座標の設定
 	TyatoraSprite.SetPos(x * 200, y * 150);
 	//大きさの設定
@@ -273,12 +302,23 @@ void Tyatora::Initialize()
 
 	//キャラの体力は3
 	HitPoint = 3;
+
+	MovePossidleFlag = true;
 }
 //描画関数
 void Tyatora::Draw()
 {
 	Direct3D::SetRenderState(RENDER_ALPHABLEND);
-	Direct3D::DrawSprite(TyatoraSprite, TyatoraTex);
+
+	//移動した後だったり相手のターンならばユニットを白黒に
+	if (MovePossidleFlag == true)
+	{
+		Direct3D::DrawSprite(TyatoraSprite, TyatoraTex[0]);
+	}
+	else if (MovePossidleFlag == false)
+	{
+		Direct3D::DrawSprite(TyatoraSprite, TyatoraTex[1]);
+	}
 
 	for (int i = 0; i < HitPoint; i++)
 	{
@@ -290,16 +330,18 @@ void Tyatora::Update()
 {
 	TyatoraSprite.SetPos((x + 1) * AttackPosX, (y + 1) * AttackPosY);
 
+	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
 		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
 	}
 
+	//ヒットポイントが0以下になればユニットは消滅
 	if (HitPoint <= 0)
 	{
 		AliveFlag = false;
 	}
-
+	//ユニットがフェードアウトする関数S
 	UnitFade();
 }
 

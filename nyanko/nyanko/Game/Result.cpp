@@ -41,6 +41,9 @@ void Result::Initialize()
 	FadeSprite.SetPos(600, 500);
 	FadeSprite.SetSize(1200, 1100);
 	FadeSprite.SetAlpha(0);
+
+	sound.Initialize();
+	se.Initialize();
 }
 
 void Result::Draw()
@@ -71,6 +74,8 @@ void Result::Update()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
 
+	sound.ResultSoundPlay();
+
 	//==■エンターキーを押すように指示を出すテクスチャを点滅させる■====================================
 	//カウントをプラス
 	EnterDrawCount++;
@@ -95,6 +100,10 @@ void Result::Update()
 	//エンターキーを押したならフラグをtrueにしてフェードアウト開始
 	if (pDi->KeyJustPressed(DIK_RETURN))
 	{
+		if (FadeFlag == false)
+		{
+			se.DecisionSEPlay();
+		}
 		FadeFlag = true;
 	}
 	//FadeFlagがtrueなら実行するように
@@ -106,6 +115,7 @@ void Result::Update()
 	//完全に画面が暗くなったならシーンをメインゲームに変更
 	if (FadeSprite.GetAlpha() == 1)
 	{
+		sound.ResultSoundStop();
 		mSceneChanger->ChangeScene(STATE_TITLE);
 	}
 }

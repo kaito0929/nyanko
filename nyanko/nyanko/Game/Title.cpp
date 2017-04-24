@@ -36,6 +36,9 @@ void Title::Initialize()
 	FadeSprite.SetPos(600, 500);
 	FadeSprite.SetSize(1200, 1100);
 	FadeSprite.SetAlpha(0);
+
+	sound.Initialize();
+	se.Initialize();
 }
 
 
@@ -59,6 +62,8 @@ void Title::Draw()
 void Title::Update()
 {
 	DirectInput* pDi = DirectInput::GetInstance();
+
+	sound.TitleSoundPlay();
 
 	//==■エンターキーを押すように指示を出すテクスチャを点滅させる■====================================
 	//カウントをプラス
@@ -85,6 +90,10 @@ void Title::Update()
 	//エンターキーを押したならフラグをtrueにしてフェードアウト開始
 	if (pDi->KeyJustPressed(DIK_RETURN))
 	{
+		if (FadeFlag == false)
+		{
+			se.DecisionSEPlay();
+		}
 		FadeFlag = true;
 	}
 	//FadeFlagがtrueなら実行するように
@@ -96,6 +105,7 @@ void Title::Update()
 	//完全に画面が暗くなったならシーンをメインゲームに変更
 	if (FadeSprite.GetAlpha() == 1)
 	{
+		sound.TitleSoundStop();
 		mSceneChanger->ChangeScene(STATE_MAIN);
 	}
 }

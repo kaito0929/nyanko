@@ -81,6 +81,12 @@
     <ClCompile Include="Game\Result.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Sound.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\SoundEffect.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameState.h">
@@ -144,6 +150,12 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Result.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Sound.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\SoundEffect.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>

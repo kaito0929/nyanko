@@ -12,6 +12,9 @@
 #include "../Scene/ISceneChanger.h"
 #include "../Scene/BaseScene.h"
 
+#include "Sound.h"
+#include "SoundEffect.h"
+
 //フェードアウト用の数値
 #define FADE_OUT_CHANGENUM 1 
 
@@ -38,6 +41,9 @@ private:
 	//エンターキーの操作を促すフォントを点滅させるための変数
 	int EnterDrawCount;
 	int EnterFlashingNum;
+
+	Sound sound;
+	SoundEffect se;
 
 public:
 	//コンストラクタ

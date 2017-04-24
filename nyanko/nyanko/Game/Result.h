@@ -12,6 +12,8 @@
 #include "../Scene/ISceneChanger.h"
 #include "../Scene/BaseScene.h"
 
+#include "Sound.h"
+#include "SoundEffect.h"
 #include "GameState.h"
 
 class Result : public BaseScene
@@ -41,6 +43,9 @@ private:
 	//エンターキーの操作を促すフォントを点滅させるための変数
 	int EnterDrawCount;
 	int EnterFlashingNum;
+
+	Sound sound;
+	SoundEffect se;
 
 public:
 	//コンストラクタ

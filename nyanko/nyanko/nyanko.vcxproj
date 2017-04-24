@@ -88,6 +88,8 @@
     <ClCompile Include="Game\Character.cpp" />
     <ClCompile Include="Game\GameState.cpp" />
     <ClCompile Include="Game\Result.cpp" />
+    <ClCompile Include="Game\Sound.cpp" />
+    <ClCompile Include="Game\SoundEffect.cpp" />
     <ClCompile Include="Game\Title.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="Scene\BaseScene.cpp" />
@@ -110,6 +112,8 @@
     <ClInclude Include="Game\Character.h" />
     <ClInclude Include="Game\GameState.h" />
     <ClInclude Include="Game\Result.h" />
+    <ClInclude Include="Game\Sound.h" />
+    <ClInclude Include="Game\SoundEffect.h" />
     <ClInclude Include="Game\Title.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="MyVector.h" />

@@ -61,8 +61,12 @@ public:
 	//ヒットポイントのハートのテクスチャ
 	Texture HitPointTex;
 	Sprite HitPointSprite[3];
-
+	//ヒットポイントのハートの位置
 	float HitPointPos[3];
+
+	//ユニットが移動可能かのフラグ
+	bool MovePossidleFlag;
+
 };
 
 
@@ -76,7 +80,7 @@ class Mikeneko :public Character
 {
 private:
 	//三毛猫のテクスチャ
-	Texture MikenekoTex;
+	Texture MikenekoTex[2];
 	Sprite MikenekoSprite;
 
 public:
@@ -109,7 +113,7 @@ class Kuroneko :public Character
 {
 private:
 	//黒猫のテクスチャ
-	Texture KuronekoTex;
+	Texture KuronekoTex[2];
 	Sprite KuronekoSprite;
 
 public:
@@ -142,7 +146,7 @@ class Tyatora :public Character
 {
 private:
 	//茶トラのテクスチャ
-	Texture TyatoraTex;
+	Texture TyatoraTex[2];
 	Sprite TyatoraSprite;
 
 public:
