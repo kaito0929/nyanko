@@ -15,6 +15,7 @@
 
 #include "Sound.h"
 #include "SoundEffect.h"
+#include "Fade.h"
 
 #define CHACKNUM 4
 #define MAPSIZE 9
@@ -24,11 +25,21 @@
 //左方向と下方向への攻撃する位置の上限
 #define PLUS_ATTACK_NUM 120
 
-//フェードアウト用の数値
-#define FADE_OUT_CHANGENUM 1 
 
-//フェードイン用の数値
-#define FADE_IN_CHANGENUM -1 
+//マップ内の移動可能範囲の最大と最小値
+#define MAP_SIZE_MIN 1
+#define MAP_SIZE_MAX 7
+
+//マップの端っこの最大と最小値
+#define MAPEND_MIN 0
+#define MAPEND_MAX 8
+
+//マップの端っこの数値
+#define MAPEND_NUM -2
+//マップの標準の数値
+#define MAPSTANDARD_NUM -1
+//攻撃対象がいるマップの数値
+#define MAP_ATTACK_OK -4
 
 extern bool FirstPlayerLosingFlag;
 extern bool SecondPlayerLosingFlag;
@@ -70,7 +81,7 @@ enum PlayerTurn
 };
 
 //ターン切り替えのカットインのための状態
-enum Fade
+enum FADE
 {
 	FADE_IN,
 	FADE_OUT,
@@ -112,17 +123,9 @@ private:
 	Texture BackGroundTex;
 	Sprite BackGroundSprite;
 
-	//ターン切り替えのカットイン用のテクスチャ(1P)
-	Texture CutIn_FirstPlayerTex;
-	Sprite CutIn_FirstPlayerSprite;
-
-	//ターン切り替えのカットイン用のテクスチャ(2P)
-	Texture CutIn_SecondPlayerTex;
-	Sprite CutIn_SecondPlayerSprite;
-
-	//フェードイン用のテクスチャ
-	Texture FadeTex;
-	Sprite FadeSprite;
+	//相性の相関図のテクスチャ
+	Texture CompatibilityTex;
+	Sprite CompatibilitySprite;
 
 	//プレイヤーの行動手順
 	PlayerState playerstate;
@@ -137,7 +140,7 @@ private:
 	PlayerTurn playerTurn;
 
 	//カットインのフェードインフェードアウト
-	Fade fade;
+	int hoge;
 
 	//マップデータ:9*9
 	int Map[MAPSIZE][MAPSIZE];
@@ -182,13 +185,16 @@ private:
 	//プレイヤーの行動回数
 	int PlayerActionNum;
 
-	Mikeneko mike_1P;
-	Kuroneko kuro_1P;
-	Tyatora tyatora_1P;
+	bool TurnChangeFlag;
 
-	Mikeneko mike_2P;
-	Kuroneko kuro_2P;
-	Tyatora tyatora_2P;
+	Mikeneko mike_1P[2];
+	Kuroneko kuro_1P[2];
+	Tyatora tyatora_1P[2];
+
+	Mikeneko mike_2P[2];
+	Kuroneko kuro_2P[2];
+	Tyatora tyatora_2P[2];
+
 
 	Sound sound;
 	SoundEffect se;
@@ -225,10 +231,7 @@ public:
 	void UnitMove(int *x, int *y,bool flag);
 
 	//マップの数値を変えるための関数
-	void MapChange(int x,int y,bool flag);
-
-	//自分のターン中に自ユニットの位置でのマップの数値の切り替え
-	void MyTurnMapChange(int x, int y, bool flag);
+	void MapChange(int myX, int myY, bool myFlag, int enemyX, int enemyY, bool enemyFlag);
 
 	//移動可能かのフラグを切り替える関数
 	void UnitMovePossidleChange(bool aliveFlag, bool *moveFlag);
@@ -249,8 +252,10 @@ public:
 	void UnitBattle();
 
 	//攻撃対象として選ばれたかのフラグを操作する関数
-	void AttackFlag(int x, int y, int cursorX, int cursorY, bool*flag);
+	void AttackFlag(int x, int y, bool*flag);
 
-	//カットインのテクスチャのフェードインフェードアウトを行う関数
-	void CutInFade();
+	//移動先に攻撃可能か調べる関数
+	void CheckAttack();
+
+	void TurnChange();
 };

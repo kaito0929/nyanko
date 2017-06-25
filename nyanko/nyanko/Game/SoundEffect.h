@@ -21,9 +21,6 @@ private:
 	WaveFile CatSE;
 	SoundBuffer sb_CatSE;
 
-	//カットインが行われた時の効果音
-	WaveFile CutInSE;
-	SoundBuffer sb_CutInSE;
 
 public:
 	SoundEffect();
@@ -38,7 +35,5 @@ public:
 	void ChoiceSEPlay();
 	//猫の鳴き声を鳴らす関数
 	void CatSEPlay();
-	//カットインの効果音を鳴らす関数
-	void CutInSEPlay();
 
 };

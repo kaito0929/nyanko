@@ -87,6 +87,12 @@
     <ClCompile Include="Game\SoundEffect.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Fade.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameState.h">
@@ -156,6 +162,12 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\SoundEffect.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Fade.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>

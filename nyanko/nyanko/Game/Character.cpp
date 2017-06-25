@@ -52,7 +52,7 @@ void Mikeneko::Initialize()
 	MikenekoTex[0].Load("Material/mikeneko.png");
 	MikenekoTex[1].Load("Material/mikeneko2.png");
 	//座標の設定
-	MikenekoSprite.SetPos(x * 200, y * 150);
+	MikenekoSprite.SetPos(x * 200.0f, y * 150.0f);
 	//大きさの設定
 	MikenekoSprite.SetSize(100, 100);
 
@@ -63,9 +63,9 @@ void Mikeneko::Initialize()
 		HitPointSprite[i].SetPos(x, y);
 	}
 
-	HitPointPos[0] = 0.7;
-	HitPointPos[1] = 1.0;
-	HitPointPos[2] = 1.3;
+	HitPointPos[0] = 0.7f;
+	HitPointPos[1] = 1.0f;
+	HitPointPos[2] = 1.3f;
 
 	//キャラの体力は3
 	HitPoint = 3;
@@ -101,7 +101,7 @@ void Mikeneko::Update()
 	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
-		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5f) * AttackPosY);
 	}
 
 	//ヒットポイントが0以下になればユニットは消滅
@@ -109,7 +109,8 @@ void Mikeneko::Update()
 	{
 		AliveFlag = false;
 	}
-	//ユニットがフェードアウトする関数S
+
+	//ユニットがフェードアウトする関数
 	UnitFade();
 }
 
@@ -181,9 +182,9 @@ void Kuroneko::Initialize()
 		HitPointSprite[i].SetPos(x, y);
 	}
 
-	HitPointPos[0] = 0.7;
-	HitPointPos[1] = 1.0;
-	HitPointPos[2] = 1.3;
+	HitPointPos[0] = 0.7f;
+	HitPointPos[1] = 1.0f;
+	HitPointPos[2] = 1.3f;
 
 	//キャラの体力は3
 	HitPoint = 3;
@@ -219,7 +220,7 @@ void Kuroneko::Update()
 	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
-		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5f) * AttackPosY);
 	}
 
 	//ヒットポイントが0以下になればユニットは消滅
@@ -296,9 +297,9 @@ void Tyatora::Initialize()
 		HitPointSprite[i].SetPos(x, y);
 	}
 
-	HitPointPos[0] = 0.7;
-	HitPointPos[1] = 1.0;
-	HitPointPos[2] = 1.3;
+	HitPointPos[0] = 0.7f;
+	HitPointPos[1] = 1.0f;
+	HitPointPos[2] = 1.3f;
 
 	//キャラの体力は3
 	HitPoint = 3;
@@ -333,7 +334,7 @@ void Tyatora::Update()
 	//ヒットポイントのハートの位置を決定
 	for (int i = 0; i < 3; i++)
 	{
-		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5) * AttackPosY);
+		HitPointSprite[i].SetPos((x + HitPointPos[i]) * AttackPosX, (y + 1.5f) * AttackPosY);
 	}
 
 	//ヒットポイントが0以下になればユニットは消滅
